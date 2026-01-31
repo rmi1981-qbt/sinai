@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Célula Sinai - Igreja Batista Atitude</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar glass">
+        <div class="logo">
+            <img src="assets/images/Logo_sinai_escuro-removebg-preview.png" alt="Sinai" class="nav-logo-img">
+        </div>
+        <a href="#" onclick="openContactModal()" class="btn-visit">Quero Visitar</a>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero" id="home">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <!-- Logo in Hero for impact -->
+            <img src="assets/images/Logo_sinai_escuro-removebg-preview.png" alt="Logo Sinai" class="hero-logo fade-in">
+
+            <h1 class="fade-in delay-100">Você viu o que o <br> <span class="text-gradient">Pastor fez?</span></h1>
+            <p class="fade-in delay-200">Não? Então você precisa descobrir onde tudo começa.</p>
+            <div class="cta-group fade-in delay-300">
+                <a href="#revelacao" class="btn-primary">Descobrir Agora</a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span class="scroll-arrow">↓</span>
+        </div>
+    </header>
+
+    <!-- The Reveal Section (New) -->
+    <section id="revelacao" class="reveal-section text-center">
+        <div class="container">
+            <h2 class="reveal-text slide-up">"Ele não apenas deu uma mensagem."</h2>
+            <h2 class="reveal-text highlight-gold slide-up delay-200">"Ele preparou uma família para você."</h2>
+        </div>
+    </section>
+
+    <!-- Story Section -->
+    <section class="story-section">
+        <div class="container">
+            <div class="card glass text-center slide-up">
+                <h2>O Segredo do Sinai</h2>
+                <p>Na Bíblia, o Monte Sinai não era apenas uma montanha.</p>
+                <div class="highlight-text">Era o lugar do <strong>ENCONTRO</strong>.</div>
+                <p>Foi lá que Deus desceu para falar com seu povo. Lá, o comum se tornava extraordinário.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Concept Section -->
+    <section class="concept-section">
+        <div class="container">
+            <div class="split-layout">
+                <div class="image-wrapper slide-right">
+                    <img src="assets/images/community-bg.png" alt="Comunidade acolhedora" class="rounded-img">
+                </div>
+                <div class="text-wrapper slide-left">
+                    <h3>O que é uma Célula?</h3>
+                    <p>Assim como no Sinai, nossa célula é esse ponto de encontro semanal.</p>
+                    <ul class="feature-list">
+                        <li>🔥 <strong>Recarregar</strong> as energias da semana</li>
+                        <li>🤝 <strong>Conectar</strong> com amigos de verdade</li>
+                        <li>💡 <strong>Crescer</strong> em todas as áreas da vida</li>
+                    </ul>
+                    <p class="final-punch">É a sua família fora de casa.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="galeria" class="gallery-section">
+        <div class="container">
+            <h2 class="section-title">Momentos que marcam</h2>
+            <div class="gallery-grid">
+                <!-- Real Photos with Lightbox -->
+                <div class="gallery-item" onclick="openLightbox(this.querySelector('img').src)">
+                    <img src="assets/images/fotos/WhatsApp Image 2026-01-09 at 07.36.38.jpeg" alt="Momento Sinai">
+                </div>
+                <div class="gallery-item" onclick="openLightbox(this.querySelector('img').src)">
+                    <img src="assets/images/fotos/WhatsApp Image 2026-01-23 at 00.08.09.jpeg" alt="Momento Sinai">
+                </div>
+                <div class="gallery-item" onclick="openLightbox(this.querySelector('img').src)">
+                    <img src="assets/images/fotos/WhatsApp Image 2026-01-29 at 21.45.31.jpeg" alt="Momento Sinai">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action / Info -->
+    <section id="contato" class="info-section">
+        <div class="container">
+            <div class="card glass info-card">
+                <h2>Vem pro Sinai 🏔️</h2>
+                <p>Nós nos reunimos toda semana e tem um lugar reservado pra você.</p>
+
+                <div class="info-details">
+                    <div class="detail-item">
+                        <span class="icon">📍</span>
+                        <div>
+                            <strong>Onde?</strong>
+                            <p>Residencial Alpha Zero<br><span style="font-size: 0.9em; opacity: 0.8">(Perto do Colégio
+                                    Mackenzie)</span></p>
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <span class="icon">📅</span>
+                        <div>
+                            <strong>Quando?</strong>
+                            <p>Todas as quintas às 20h</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Google Maps Embed -->
+                <div class="map-container fade-in">
+                    <iframe
+                        src="https://maps.google.com/maps?q=-23.486076214986138,-46.83872260079768&hl=pt-br&z=16&output=embed"
+                        width="100%" height="300" style="border:0; border-radius: 12px; margin-bottom: 2rem;"
+                        allowfullscreen="" loading="lazy"></iframe>
+                </div>
+
+                <a href="#" onclick="openContactModal()" class="btn-whatsapp">
+                    Quero Visitar
+                </a>
+
+                <!-- Other Locations -->
+                <div class="other-locations">
+                    <p>Gostaria de conhecer mas é longe para você?</p>
+                    <p class="small-text">Temos células espalhadas por toda região (Osasco, Carapicuiba, SP).</p>
+                    <a href="https://wa.me/5561984017019?text=Gostaria%20de%20conhecer%20uma%20celula%2C%20mas%20a%20Sinai%20fica%20longe%20para%20mim%2C%20quais%20s%C3%A3o%20as%20outras%20op%C3%A7%C3%B5es%3F"
+                        class="btn-secondary">
+                        Falar com Jaque sobre outras opções
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>Igreja Batista Atitude - Célula Sinai</p>
+            <p class="small">Feito com ❤️ para o Reino</p>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content glass">
+            <span class="close" onclick="closeContactModal()">&times;</span>
+            <h3 style="margin-bottom: 1rem; color: var(--primary-gold);">Escolha com quem falar:</h3>
+            <div class="contact-list">
+                <a href="https://wa.me/5551989107969?text=Ol%C3%A1%2C%20gostaria%20de%20conhecer%20a%20celula%20Sinai%21"
+                    class="contact-btn">Maicon</a>
+                <a href="https://wa.me/5551991859755?text=Ol%C3%A1%2C%20gostaria%20de%20conhecer%20a%20celula%20Sinai%21"
+                    class="contact-btn">Bruna</a>
+                <a href="https://wa.me/5561999097477?text=Ol%C3%A1%2C%20gostaria%20de%20conhecer%20a%20celula%20Sinai%21"
+                    class="contact-btn">Roberto</a>
+                <a href="https://wa.me/5561984017019?text=Ol%C3%A1%2C%20gostaria%20de%20conhecer%20a%20celula%20Sinai%21"
+                    class="contact-btn">Jaque</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+        <span class="close" style="top: 20px; right: 30px; font-size: 40px; color: white;">&times;</span>
+        <img class="lightbox-content" id="lightbox-img">
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
