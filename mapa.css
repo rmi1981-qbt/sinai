@@ -1,0 +1,178 @@
+:root {
+    /* Identidade Rede Azul (Restrito à tela do mapa) */
+    --primary-gold: #ffd000; /* Amarelo Smiley */
+    --primary-sand: #ffffff; /* Branco do aro */
+    --dark-bg: #0b4c9e; /* Azul Escuro profundo de fundo */
+    --glass-bg: rgba(255, 255, 255, 0.1); 
+    --glass-border: rgba(255, 255, 255, 0.15);
+}
+
+/* Layout da página de mapas/videos */
+body {
+    background-color: var(--dark-bg);
+    color: var(--text-light);
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+/* Força a cor sólida da logo no topo pra não ter desnível de cor no fundo transparente do PNG */
+.navbar.glass {
+    background: var(--dark-bg) !important;
+    border-bottom: none;
+}
+
+.map-layout {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 100px 20px 20px; /* espaco pro navbar */
+    gap: 20px;
+    height: 100vh;
+    box-sizing: border-box;
+}
+
+/* Sidebar */
+.sidebar {
+    flex: 1;
+    min-width: 300px;
+    max-width: 350px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    overflow-y: auto;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.sidebar h2 {
+    color: var(--primary-gold);
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.filter-group label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--primary-gold); /* Cor mais clara e destacada em contraste com o fundo escuro */
+}
+
+.filter-group select {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: var(--dark-bg);
+    color: white;
+    font-family: 'Outfit', sans-serif;
+    cursor: pointer;
+}
+
+.filter-group select:focus {
+    border-color: var(--primary-gold);
+    outline: none;
+}
+
+/* Quadro Resumo */
+.summary-box {
+    margin-top: 15px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    padding: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.summary-box h3 {
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    color: var(--primary-gold);
+}
+
+#summary-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#summary-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: #e0e0e0; /* Cor mais clara para contraste com fundo escuro */
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+#summary-list li:hover {
+    color: var(--primary-gold);
+}
+
+#summary-list li.active {
+    color: var(--primary-gold);
+    font-weight: bold;
+    background: rgba(255, 208, 0, 0.15); /* Equivalente RGBA ao Yellow #ffd000 com transparência */
+    padding: 10px;
+    border-radius: 8px;
+    border-bottom: none;
+    margin: 2px 0; /* espaço interno para não colar nas bordas apos o radius */
+}
+
+#summary-list li:last-child {
+    border-bottom: none;
+}
+
+.badge {
+    background: var(--primary-gold);
+    color: var(--dark-bg);
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+/* Área do Mapa */
+.map-container-main {
+    flex: 3;
+    min-width: 300px;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+    min-height: 500px; /* para mobile */
+    background: #e5e5e5;
+}
+
+/* Popup do Leaflet */
+.leaflet-popup-content-wrapper {
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.95);
+}
+.leaflet-popup-content {
+    font-family: 'Outfit', sans-serif;
+}
+
+/* Responsividade mobile */
+@media (max-width: 768px) {
+    .map-layout {
+        flex-direction: column;
+        height: auto;
+    }
+    .map-container-main {
+        height: 60vh;
+    }
+}

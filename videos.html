@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vídeos - Rede Azul</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <!-- Custom CSS (Reaproveitando a base da página do mapa) -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mapa.css">
+
+    <style>
+        .video-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .video-list li {
+            padding: 15px;
+            margin-bottom: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .video-list li:hover {
+            border-color: var(--primary-gold);
+            transform: translateX(5px);
+        }
+
+        .video-list li.active {
+            background: rgba(255, 208, 0, 0.15); /* Equivalente RGBA ao Yellow #ffd000 com transparência */
+            border-color: var(--primary-gold);
+            color: var(--primary-gold);
+            font-weight: bold;
+        }
+
+        .video-thumb {
+            width: 80px;
+            height: 45px;
+            background-color: #000;
+            border-radius: 4px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .video-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .video-title {
+            font-size: 1rem;
+        }
+        
+        .video-subtitle {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            color: #e0e0e0;
+            font-weight: normal;
+        }
+
+        /* Container do iframe para ocupar toda a div responsivamente */
+        .video-player-wrapper {
+            width: 100%;
+            height: 100%;
+            min-height: 500px; /* mesmo min-height do mapa */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #000;
+        }
+
+        #player {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navegação reaproveitada -->
+    <nav class="navbar glass">
+        <div class="logo">
+            <a href="index.html">
+                <img src="assets/images/logo_rede_azul.png" alt="Rede Azul" class="nav-logo-img">
+            </a>
+        </div>
+        <a href="mapa.html" class="btn-visit" style="background:transparent; border:1px solid var(--primary-gold); color:var(--primary-gold);">Voltar ao Mapa</a>
+    </nav>
+
+    <div class="map-layout">
+        <!-- Barra Lateral com a Playlist -->
+        <aside class="sidebar glass">
+            <h2>Playlist da Rede</h2>
+            <p style="font-size:0.9rem; opacity:0.8; margin-bottom: 20px;">Selecione um vídeo para assistir. A reprodução avançará automaticamente.</p>
+            
+            <ul class="video-list" id="playlist">
+                <!-- Gerado por JS baseado no array -->
+            </ul>
+        </aside>
+
+        <!-- Container de Reprodução substituindo o Mapa -->
+        <main class="map-container-main">
+            <div class="video-player-wrapper">
+                <div id="player"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Script da API do YouTube -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+    
+    <!-- Script Personalizado -->
+    <script src="videos.js"></script>
+</body>
+
+</html>

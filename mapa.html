@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Células no Mapa - Rede Azul</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <!-- Leaflet CSS (Mapa) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mapa.css">
+</head>
+
+<body>
+    <!-- Navegação -->
+    <nav class="navbar glass">
+        <div class="logo">
+            <a href="index.html">
+                <img src="assets/images/logo_rede_azul.png" alt="Rede Azul" class="nav-logo-img">
+            </a>
+        </div>
+        <a href="index.html" class="btn-visit">Voltar ao Início</a>
+    </nav>
+
+    <div class="map-layout">
+        <!-- Barra Lateral com Filtros -->
+        <aside class="sidebar glass">
+            <h2>Filtre e Encontre</h2>
+
+            <div class="filter-group">
+                <label for="filter-rede">Rede</label>
+                <select id="filter-rede">
+                    <option value="">Todas</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="filter-uf">UF</label>
+                <select id="filter-uf">
+                    <option value="">Todas</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="filter-cidade">Cidade</label>
+                <select id="filter-cidade">
+                    <option value="">Todas</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="filter-bairro">Bairro</label>
+                <select id="filter-bairro">
+                    <option value="">Todos</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="filter-dia">Dia da Semana</label>
+                <select id="filter-dia">
+                    <option value="">Todos</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="filter-horario">Horário</label>
+                <select id="filter-horario">
+                    <option value="">Todos</option>
+                </select>
+            </div>
+
+            <!-- Quadro de Resumo por Dia -->
+            <div class="summary-box">
+                <h3>Células por Dia</h3>
+                <ul id="summary-list">
+                    <!-- Gerado pelo Javascript -->
+                </ul>
+            </div>
+
+            <!-- Botão para Vídeos -->
+            <a href="videos.html" class="btn-visit" style="display:block; text-align:center; margin-top:15px; background:var(--primary-gold); color:var(--dark-bg);">
+                ▶ Assistir Vídeos
+            </a>
+        </aside>
+
+        <!-- Container do Mapa -->
+        <main class="map-container-main">
+            <div id="map"></div>
+        </main>
+    </div>
+
+    <!-- Leaflet JS (Mapa) -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <!-- Script Personalizado -->
+    <script src="mapa.js"></script>
+</body>
+
+</html>
