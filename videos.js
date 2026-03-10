@@ -1,26 +1,119 @@
-// Lista de vídeos fornecida
-const VIDEOS = [
-    { title: "Célula", subtitle: "Vídeo 1", id: "TdteRds4Dv0" },
-    { title: "Testemunho", subtitle: "Vídeo 2", id: "IF7ZP0K-eeQ" },
-    { title: "Visão Celular", subtitle: "Vídeo 3", id: "g8hZbzMOAlA" }
-];
-
+// Arrays dinâmicos que serão preenchidos pelo CSV
+let VIDEOS = [];
 let player;
 let currentVideoIndex = 0;
 
-// Renderizar o menu lateral de vídeos
+// Variáveis de controle para o Assincronismo: O Youtube e o Banco de Dados vão baixar ao mesmo tempo
+let isYoutubeReady = false;
+let isCsvLoaded = false;
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadCSV();
+});
+
+// Faz o download do arquivo de videos usando carimbo de tempo pra quebrar Cache do navegador
+function loadCSV() {
+    fetch(`videos.csv?t=${new Date().getTime()}`)
+        .then(response => {
+            if (!response.ok) throw new Error("Erro ao carregar videos.csv");
+            return response.text();
+        })
+        .then(text => {
+            parseCSV(text);
+            isCsvLoaded = true;
+            checkReady(); // Avisa que os dados já chegaram
+        })
+        .catch(err => {
+            console.error(err);
+            document.getElementById('playlist').innerHTML = `<li style="color:red; margin: 10px;">Erro ao carregar vídeos do Banco de Dados: ${err.message}</li>`;
+        });
+}
+
+function parseCSV(text) {
+    // Limpezas de segurança essenciais provenientes de bugs do Bloco de Notas / Excel no modo CSV
+    text = text.replace(/^\uFEFF/, ''); 
+    const lines = text.trim().split(/\r?\n/);
+    if (lines.length < 2) return; 
+
+    // Ignoramos a primeira linha (cabeçalho) e lemos a partir do índice 1
+    for (let i = 1; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (!line) continue;
+        
+        // Separa colunas como titulo; subtitulo; url
+        const values = line.split(';');
+        const title = values[0] ? values[0].trim() : `Vídeo ${i}`;
+        const subtitle = values[1] ? values[1].trim() : '';
+        const rawUrl = values[2] ? values[2].trim() : '';
+        
+        // A função inteligente entende caso ele jogue o link da web ou link do app do Youtube
+        const videoId = extractYouTubeID(rawUrl);
+        if (videoId) {
+            VIDEOS.push({ title, subtitle, id: videoId });
+        }
+    }
+}
+
+// Extrator inteligente via Expressões Regulares de Javascript para aceitar vários formatos de links
+function extractYouTubeID(url) {
+    if (!url) return null;
+    
+    // Tenta arrancar só o "Código Mágico" de 11 Letras do Link inteiro do youtube caso o usuario jogue completo
+    const regExp = /^.*(youtu.be\/|v\/|e\/|u\/\w+\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    
+    // Caso o usuário insira só o código limpo no Excel sem link do site, a gente só repassa as 11 letras diretas
+    return (match && match[2].length === 11) ? match[2] : url.trim();
+}
+
+// Esta função é chamada magicamente pela biblioteca externa <script src="https://www.youtube.com/iframe_api">
+// quando ela terminar o download de internet.
+function onYouTubeIframeAPIReady() {
+    isYoutubeReady = true;
+    checkReady(); // Avisa que o player virtual está de pé
+}
+
+// Controle de tráfego: Se o vídeo e o player baixaram ao mesmo tempo, podemos dar boot  na tela
+function checkReady() {
+    if (isYoutubeReady && isCsvLoaded) {
+        if (VIDEOS.length > 0) {
+            initPlayer();
+            renderPlaylist();
+        } else {
+            // Se o CSV está vazio de linhas
+            document.getElementById('playlist').innerHTML = `<li style="padding:15px; text-align:center;">Nenhum vídeo cadastrado em vídeos.csv</li>`;
+        }
+    }
+}
+
+function initPlayer() {
+    player = new YT.Player('player', {
+        height: '100%',
+        width: '100%',
+        videoId: VIDEOS[currentVideoIndex].id,
+        playerVars: {
+            'autoplay': 1,
+            'rel': 0, // Inibe mostrar recomendações forçadas do Youtube de outros canais
+            'showinfo': 0,
+            'modestbranding': 1
+        },
+        events: {
+            'onStateChange': onPlayerStateChange
+        }
+    });
+}
+
 function renderPlaylist() {
     const playlistContainer = document.getElementById('playlist');
     playlistContainer.innerHTML = '';
 
     VIDEOS.forEach((video, index) => {
         const li = document.createElement('li');
-        // Define classe active se for o video rodando no momento
         if (index === currentVideoIndex) {
-            li.classList.add('active');
+            li.classList.add('active'); // Destaca na lista de episódios
         }
 
-        // Recuperar miniatura do youtube via URL (maxresdefault nem sempre tem, hqdefault é mais seguro)
+        // Tenta roubar a imagem de miniatura mais alta gerada pelo próprio Youtube 
         const thumbUrl = `https://img.youtube.com/vi/${video.id}/hqdefault.jpg`;
 
         li.innerHTML = `
@@ -39,35 +132,9 @@ function renderPlaylist() {
     });
 }
 
-// Essa função é chamada automaticamente pelo script da API do YouTube assim que ela carrega
-function onYouTubeIframeAPIReady() {
-    player = new YT.Player('player', {
-        height: '100%',
-        width: '100%',
-        videoId: VIDEOS[currentVideoIndex].id,
-        playerVars: {
-            'autoplay': 1,
-            'rel': 0, // Minimiza vídeos recomendados de outros canais
-            'showinfo': 0,
-            'modestbranding': 1
-        },
-        events: {
-            'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
-        }
-    });
-
-    renderPlaylist();
-}
-
-function onPlayerReady(event) {
-    // Se quiser que inicie mutado pra forçar o autoplay nos navegadores
-    // event.target.mute();
-}
-
-// Função escuta as mudanças do player (Play, Pausa, Acabou)
+// Ouve se o estado do youtube mudou (tipo: pausou, bufferizou ou finalizou a metrica do video)
 function onPlayerStateChange(event) {
-    // Quando o video terminar de tocar (estado 0)
+    // 0 é o gatilho que a barrinha bateu no infinito.. se sim passa pro proximo cap.
     if (event.data === YT.PlayerState.ENDED) {
         playNextVideo();
     }
@@ -75,22 +142,21 @@ function onPlayerStateChange(event) {
 
 function playVideo(index) {
     currentVideoIndex = index;
-    renderPlaylist(); // Refaz o menu para iluminar o selecionado
+    renderPlaylist(); // Acende a bolinha certa do menu
     
+    // Injeta na TV o novo ID de video 
     if (player && player.loadVideoById) {
         player.loadVideoById(VIDEOS[currentVideoIndex].id);
     }
 }
 
 function playNextVideo() {
-    // Avança 1 casa. Se passar o total, zera pro primeiro vídeo
     currentVideoIndex++;
+    
+    // Se zerei o final da fita, volta po cap 1
     if (currentVideoIndex >= VIDEOS.length) {
         currentVideoIndex = 0;
     }
     
     playVideo(currentVideoIndex);
 }
-
-// Inicia renderização visual básica aguardando a API do Youtube ser inserida
-renderPlaylist();
