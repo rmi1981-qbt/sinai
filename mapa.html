@@ -35,6 +35,15 @@
         <aside class="sidebar glass">
             <h2>Filtre e Encontre</h2>
 
+            <!-- Pesquisa por Endereço Geospacial -->
+            <div class="filter-group" style="margin-bottom: 10px;">
+                <label for="address-search">Célula mais próxima (Endereço)</label>
+                <div style="display: flex; gap: 5px;">
+                    <input type="text" id="address-search" placeholder="Rua Nome, Cidade" style="flex-grow: 1; padding: 10px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.2); background: var(--dark-bg); color: white; font-family: 'Outfit', sans-serif;">
+                    <button id="btn-search-address" style="background: var(--primary-gold); border: none; border-radius: 8px; padding: 0 15px; cursor: pointer; color: var(--dark-bg); font-weight: bold;">Ir</button>
+                </div>
+            </div>
+
             <div class="filter-group">
                 <label for="filter-rede">Rede</label>
                 <select id="filter-rede">

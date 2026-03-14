@@ -124,18 +124,69 @@
     <section id="galeria" class="gallery-section">
         <div class="container">
             <h2 class="section-title">Momentos que marcam</h2>
-            <div class="gallery-grid">
-                <!-- Real Photos with Lightbox -->
-                <div class="gallery-item" onclick="openLightbox(this.querySelector('img').src)">
-                    <img src="assets/images/fotos/WhatsApp Image 2026-01-09 at 07.36.38.jpeg" alt="Momento Sinai">
+            <div style="position: relative;">
+                <button id="carousel-prev" class="carousel-btn" aria-label="Anterior">&#10094;</button>
+                <div class="gallery-carousel-wrapper">
+                    <!-- Gerado Dinamicamente pelo Javascript a partir de fotos-data.js -->
+                    <div id="dynamic-gallery" class="gallery-carousel"></div>
                 </div>
-                <div class="gallery-item" onclick="openLightbox(this.querySelector('img').src)">
-                    <img src="assets/images/fotos/WhatsApp Image 2026-01-23 at 00.08.09.jpeg" alt="Momento Sinai">
-                </div>
-                <div class="gallery-item" onclick="openLightbox(this.querySelector('img').src)">
-                    <img src="assets/images/fotos/WhatsApp Image 2026-01-29 at 21.45.31.jpeg" alt="Momento Sinai">
-                </div>
+                <button id="carousel-next" class="carousel-btn" aria-label="Próximo">&#10095;</button>
             </div>
+            
+            <!-- Estilos simples para o carrossel (O resto já está no style.css) -->
+            <style>
+                .gallery-carousel-wrapper {
+                    overflow-x: auto;
+                    scroll-behavior: smooth;
+                    scroll-snap-type: x mandatory;
+                    -webkit-overflow-scrolling: touch;
+                    padding-bottom: 15px;
+                }
+                .gallery-carousel-wrapper::-webkit-scrollbar {
+                    height: 8px;
+                }
+                .gallery-carousel-wrapper::-webkit-scrollbar-track {
+                    background: rgba(255, 255, 255, 0.05);
+                    border-radius: 4px;
+                }
+                .gallery-carousel-wrapper::-webkit-scrollbar-thumb {
+                    background: var(--primary-gold);
+                    border-radius: 4px;
+                }
+                .gallery-carousel {
+                    display: flex;
+                    gap: 20px;
+                }
+                .gallery-carousel .gallery-item {
+                    flex: 0 0 auto;
+                    width: 300px;
+                    scroll-snap-align: start;
+                }
+                .carousel-btn {
+                    position: absolute;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    background: rgba(0, 0, 0, 0.6);
+                    color: white;
+                    border: 2px solid var(--primary-gold);
+                    border-radius: 50%;
+                    width: 45px;
+                    height: 45px;
+                    font-size: 20px;
+                    cursor: pointer;
+                    z-index: 10;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    transition: all 0.3s;
+                }
+                .carousel-btn:hover {
+                    background: var(--primary-gold);
+                    color: black;
+                }
+                #carousel-prev { left: -15px; }
+                #carousel-next { right: -15px; }
+            </style>
         </div>
     </section>
 
@@ -223,6 +274,7 @@
         <img class="lightbox-content" id="lightbox-img">
     </div>
 
+    <script src="fotos-data.js"></script>
     <script src="script.js"></script>
 </body>
 

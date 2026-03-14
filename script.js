@@ -48,6 +48,48 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Renderiza a galeria dinamicamente usando fotos-data.js
+    const galleryContainer = document.getElementById('dynamic-gallery');
+    if (galleryContainer && typeof FOTOS_CELULA !== 'undefined') {
+        FOTOS_CELULA.forEach(fotoUrl => {
+            const item = document.createElement('div');
+            item.className = 'gallery-item';
+            
+            const img = document.createElement('img');
+            img.src = `assets/images/fotos/${fotoUrl}`;
+            img.alt = "Galeria Sinai";
+            
+            // Se a imagem tiver sido apagada da pasta, ela dará erro ao carregar.
+            // Quando esse erro acontecer, removemos o quadrado dela do carrossel silenciosamente.
+            img.onerror = function() {
+                item.remove();
+            };
+
+            item.appendChild(img);
+            
+            // Adiciona o click do lightbox
+            item.onclick = function() {
+                openLightbox(img.src);
+            };
+
+            galleryContainer.appendChild(item);
+        });
+
+        // Configura Setas do Carrossel
+        const wrapper = document.querySelector('.gallery-carousel-wrapper');
+        const btnPrev = document.getElementById('carousel-prev');
+        const btnNext = document.getElementById('carousel-next');
+
+        if (wrapper && btnPrev && btnNext) {
+            btnPrev.addEventListener('click', () => {
+                wrapper.scrollBy({ left: -320, behavior: 'smooth' }); // Move 320px pra esquerda
+            });
+            btnNext.addEventListener('click', () => {
+                wrapper.scrollBy({ left: 320, behavior: 'smooth' }); // Move 320px pra direita
+            });
+        }
+    }
+
 });
 
 // Modal Logic

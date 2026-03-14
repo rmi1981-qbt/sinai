@@ -2,6 +2,8 @@
 let allCells = [];
 let map;
 let markersLayer;
+let currentMarkers = []; // Armazena as referências dos marcadores atuais visíveis
+let userMarker = null;   // Armazena o marcador do endereço pesquisado pelo usuário
 
 // Mapeamento constante dos cabeçalhos do CSV
 const HEADERS = {
@@ -236,6 +238,7 @@ function updateSummary() {
 function renderMap(cells) {
     // Toda vez que filtramos limpamos os pinos anteriores
     markersLayer.clearLayers();
+    currentMarkers = []; // Limpa o array de referências a cada novo render
     
     if (cells.length === 0) return;
 
@@ -282,6 +285,9 @@ function renderMap(cells) {
         // Cria o pino central customizado em vez do pino basico usando a mesma cor
         const marker = L.marker([lat, lng], { icon: createCustomIcon(redeColor) }).addTo(markersLayer);
 
+        // Salva a referência para podermos calcular distâncias depois
+        currentMarkers.push({ marker: marker, lat: lat, lng: lng, cell: cell });
+
         // Prepara o popup de HTML
         const whatsappNumber = cell[HEADERS.CONTATO].replace(/\D/g, ''); // limpa tudo, deixa sós os numeros para o link
         const popupContent = `
@@ -308,5 +314,118 @@ function renderMap(cells) {
     // Anima a câmera do mapa para dar caber todos os pontos encontrados
     if (bounds.length > 0) {
         map.fitBounds(bounds, { padding: [50, 50] });
+    }
+}
+
+// ==========================================
+// FUNCIONALIDADE DE BUSCA GEOSPACIAL
+// ==========================================
+
+document.addEventListener('DOMContentLoaded', () => {
+    const btnSearch = document.getElementById('btn-search-address');
+    const inputSearch = document.getElementById('address-search');
+
+    if (btnSearch && inputSearch) {
+        btnSearch.addEventListener('click', performAddressSearch);
+        inputSearch.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') performAddressSearch();
+        });
+    }
+});
+
+async function performAddressSearch() {
+    const query = document.getElementById('address-search').value.trim();
+    if (!query) return;
+
+    // Removemos os marcadores de endereço e repintamos as células para limpar pesquisas anteriores
+    if (userMarker) {
+        map.removeLayer(userMarker);
+    }
+    
+    // Altera o texto do botão para indicar carregamento
+    const btnSearch = document.getElementById('btn-search-address');
+    const originalText = btnSearch.innerText;
+    btnSearch.innerText = '...';
+    btnSearch.disabled = true;
+
+    // Adiciona "Brasil" na busca para evitar resultados estrangeiros acidentais
+    const searchQuery = query.toLowerCase().includes('brasil') ? query : `${query}, Brasil`;
+
+    try {
+        const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery)}`);
+        const data = await response.json();
+
+        if (data && data.length > 0) {
+            const userLat = parseFloat(data[0].lat);
+            const userLng = parseFloat(data[0].lon);
+
+            // Cria o ícone para o usuário (Ponto de Origem)
+            const userIcon = L.divIcon({
+                className: '',
+                html: `<div style="background-color: var(--primary-gold); border: 3px solid var(--dark-bg); width: 16px; height: 16px; border-radius: 50%; box-shadow: 0 0 5px rgba(0,0,0,0.5);"></div>`,
+                iconSize: [20, 20],
+                iconAnchor: [10, 10]
+            });
+
+            userMarker = L.marker([userLat, userLng], { icon: userIcon }).addTo(map)
+                .bindPopup(`<b>Ponto de Busca:</b><br>${query}`);
+
+            findClosestCell(userLat, userLng);
+
+        } else {
+            alert("Endereço não encontrado. Tente ser mais específico (ex: Rua Nome, Cidade - Estado).");
+        }
+    } catch (err) {
+        console.error("Erro na busca de endereço", err);
+        alert("Ocorreu um erro ao buscar o endereço. Verifique sua conexão com a internet.");
+    } finally {
+        btnSearch.innerText = originalText;
+        btnSearch.disabled = false;
+    }
+}
+
+function findClosestCell(userLat, userLng) {
+    if (currentMarkers.length === 0) {
+        alert("Não há células visíveis no mapa para calcular a distância.");
+        map.setView([userLat, userLng], 14);
+        return;
+    }
+
+    let closest = null;
+    let minDistance = Infinity;
+
+    currentMarkers.forEach(item => {
+        // map.distance(A, B) calcula a distância geodésica curvada da terra (Haversine) em Metros nativamente pelo Leaflet
+        const dist = map.distance([userLat, userLng], [item.lat, item.lng]);
+        if (dist < minDistance) {
+            minDistance = dist;
+            closest = item;
+        }
+    });
+
+    if (closest) {
+        const distKm = (minDistance / 1000).toFixed(1);
+        
+        // Ajusta a câmera do mapa para englobar visualmente na tela BOTH o usuário E a célula mais próxima simultaneamente
+        const bounds = L.latLngBounds([userLat, userLng], [closest.lat, closest.lng]);
+        
+        // Dá um fitBounds, mas limita o maxZoom para não dar close demais caso seja o vizinho de porta
+        map.fitBounds(bounds, { padding: [50, 50], maxZoom: 15 });
+
+        // Abre o popup da célula com uma anotação de distância injetada de forma não-destrutiva
+        const originalPopup = closest.marker.getPopup().getContent();
+        
+        // Evita duplicar a etiqueta de distância se o usuário apertar buscar 2 vezes consecutivas
+        if (!originalPopup.includes('Distância aproximada:')) {
+             closest.marker.setPopupContent(originalPopup + `
+             <div style="margin-top:10px; padding:8px; background:rgba(232, 69, 69, 0.1); border-left:4px solid #e84545; border-radius:4px;">
+                 <p style="margin:0; color:#e84545; font-weight:bold; font-size:12px;">📍 Mais Próxima (${distKm} km)</p>
+             </div>`);
+        }
+        
+        // Após o movimento de câmera terminar, abre o popup automaticamente
+        setTimeout(() => {
+            closest.marker.openPopup();
+        }, 500); // pequeno delay visual
     }
 }
