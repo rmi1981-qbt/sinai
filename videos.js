@@ -91,18 +91,23 @@ function checkReady() {
 }
 
 function initPlayer() {
+    // Pega o domínio completo dinamicamente (útil para o Github/Appfy liberar o video)
+    const currentOrigin = window.location.origin;
+
     player = new YT.Player('player', {
         height: '100%',
         width: '100%',
         videoId: VIDEOS[currentVideoIndex].id,
         playerVars: {
-            'autoplay': 1,
+            'autoplay': 0, // Tiramos o autoplay forçado pois os navegadores modernos bloqueiam videos com som não solicitados
             'rel': 0, // Inibe mostrar recomendações forçadas do Youtube de outros canais
             'showinfo': 0,
-            'modestbranding': 1
+            'modestbranding': 1,
+            'origin': currentOrigin // Envia o dominio atual para o Youtube para evitar bloqueio de segurança
         },
         events: {
-            'onStateChange': onPlayerStateChange
+            'onStateChange': onPlayerStateChange,
+            'onError': onPlayerError // Adicionado para relatar erros (já implementado no arquivo)
         }
     });
 }
@@ -141,6 +146,31 @@ function onPlayerStateChange(event) {
     // 0 é o gatilho que a barrinha bateu no infinito.. se sim passa pro proximo cap.
     if (event.data === YT.PlayerState.ENDED) {
         playNextVideo();
+    }
+}
+
+// Intercepta erros graves de reprodução que o Youtube cospe de volta
+function onPlayerError(event) {
+    const errorCodes = {
+        2: "Parâmetro de vídeo inválido fornecido ao YouTube.",
+        5: "Vídeo HTML5 incompatível com o navegador.",
+        100: "Vídeo não encontrado. Pode ter sido removido ou está privado no YouTube.",
+        101: "O dono deste vídeo não permite que ele seja reproduzido fora do site do YouTube (Incorporação Desativada).",
+        150: "O dono deste vídeo não permite que ele seja reproduzido fora do site do YouTube (Incorporação Desativada)."
+    };
+    
+    const explanation = errorCodes[event.data] || "Erro desconhecido de reprodução.";
+    
+    // Apaga a tela preta e bota um aviso bem chamativo
+    const wrapper = document.querySelector('.video-player-wrapper');
+    if (wrapper) {
+        wrapper.innerHTML = `
+            <div style="text-align:center; padding: 40px; color: #fff;">
+                <h3 style="color:red; margin-bottom:10px;">Vídeo Bloqueado pelo YouTube</h3>
+                <p>${explanation}</p>
+                <a href="https://www.youtube.com/watch?v=${VIDEOS[currentVideoIndex].id}" target="_blank" style="display:inline-block; margin-top:20px; padding:10px 20px; background:#fff; color:#000; border-radius:5px; text-decoration:none; font-weight:bold;">Assistir Diretamente no YouTube</a>
+            </div>
+        `;
     }
 }
 
