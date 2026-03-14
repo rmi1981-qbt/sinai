@@ -75,10 +75,14 @@ function onYouTubeIframeAPIReady() {
 
 // Controle de tráfego: Se o vídeo e o player baixaram ao mesmo tempo, podemos dar boot  na tela
 function checkReady() {
-    if (isYoutubeReady && isCsvLoaded) {
+    if (isCsvLoaded) {
         if (VIDEOS.length > 0) {
-            initPlayer();
             renderPlaylist();
+            
+            // Só inicializa o IFRAME do Youtube se a API do Google já terminou de baixar na página
+            if (isYoutubeReady && !player) {
+                initPlayer();
+            }
         } else {
             // Se o CSV está vazio de linhas
             document.getElementById('playlist').innerHTML = `<li style="padding:15px; text-align:center;">Nenhum vídeo cadastrado em vídeos.csv</li>`;
