@@ -50,30 +50,22 @@
                     <option value="">Todas</option>
                 </select>
             </div>
-            <div class="filter-group">
-                <label for="filter-uf">UF</label>
-                <select id="filter-uf">
-                    <option value="">Todas</option>
-                </select>
+            
+            <div style="display: flex; gap: 10px;">
+                <div class="filter-group" style="flex: 1;">
+                    <label for="filter-cidade">Cidade</label>
+                    <select id="filter-cidade">
+                        <option value="">Todas</option>
+                    </select>
+                </div>
+                <div class="filter-group" style="flex: 1;">
+                    <label for="filter-bairro">Bairro</label>
+                    <select id="filter-bairro">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
             </div>
-            <div class="filter-group">
-                <label for="filter-cidade">Cidade</label>
-                <select id="filter-cidade">
-                    <option value="">Todas</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <label for="filter-bairro">Bairro</label>
-                <select id="filter-bairro">
-                    <option value="">Todos</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <label for="filter-dia">Dia da Semana</label>
-                <select id="filter-dia">
-                    <option value="">Todos</option>
-                </select>
-            </div>
+
             <div class="filter-group">
                 <label for="filter-horario">Horário</label>
                 <select id="filter-horario">
@@ -87,6 +79,12 @@
                 <ul id="summary-list">
                     <!-- Gerado pelo Javascript -->
                 </ul>
+            </div>
+
+            <!-- QR Code de Cadastro -->
+            <div class="qr-container" style="text-align: center; margin-top: auto; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.2); display: flex; flex-direction: column; justify-content: flex-end;">
+                <h3 style="color: var(--primary-gold); font-size: 1.1rem; margin-bottom: 10px;">Bem-vindos à família Atitude!</h3>
+                <img src="assets/images/qr_cadastro.png" alt="QR Code Cadastro" style="width: 100%; max-width: 200px; height: auto; background: white; padding: 5px; border-radius: 8px; border: 2px solid var(--primary-gold); margin: 0 auto;">
             </div>
 
             <!-- Botão para Vídeos -->

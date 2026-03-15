@@ -34,8 +34,8 @@ body {
 /* Sidebar */
 .sidebar {
     flex: 1;
-    min-width: 300px;
-    max-width: 350px;
+    min-width: 330px;
+    max-width: 400px;
     background: rgba(255, 255, 255, 0.05);
     border-radius: 12px;
     padding: 20px;

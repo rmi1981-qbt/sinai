@@ -4,6 +4,7 @@ let map;
 let markersLayer;
 let currentMarkers = []; // Armazena as referências dos marcadores atuais visíveis
 let userMarker = null;   // Armazena o marcador do endereço pesquisado pelo usuário
+let selectedDayFilter = ''; // Guarda o filtro de dia atual selecionado pelo resumo
 
 // Mapeamento constante dos cabeçalhos do CSV
 const HEADERS = {
@@ -119,7 +120,17 @@ function parseCSV(text) {
         
         let row = {};
         keys.forEach((key, index) => {
-            row[key] = (values[index] || '').trim();
+            let val = (values[index] || '').trim();
+            
+            // Normalize days of week so that unaccented versions match the dayOrder array
+            if (key === 'dia_da_semana') {
+                const lowerVal = val.toLowerCase();
+                if (lowerVal === 'terca-feira' || lowerVal === 'terça feira' || lowerVal === 'terca feira') val = 'terça-feira';
+                if (lowerVal === 'sabado') val = 'sábado';
+                val = val.toLowerCase();
+            }
+            
+            row[key] = val;
         });
         allCells.push(row);
     }
@@ -129,10 +140,8 @@ function parseCSV(text) {
 function populateFilters() {
     const filterSelectors = {
         'filter-rede': HEADERS.REDE,
-        'filter-uf': HEADERS.UF,
         'filter-cidade': HEADERS.CIDADE,
         'filter-bairro': HEADERS.BAIRRO,
-        'filter-dia': HEADERS.DIA,
         'filter-horario': HEADERS.HORA
     };
 
@@ -161,17 +170,15 @@ function bindFilters() {
 
 function applyFilters() {
     const rede = document.getElementById('filter-rede').value;
-    const uf = document.getElementById('filter-uf').value;
     const cidade = document.getElementById('filter-cidade').value;
     const bairro = document.getElementById('filter-bairro').value;
-    const dia = document.getElementById('filter-dia').value;
+    const dia = selectedDayFilter;
     const horario = document.getElementById('filter-horario').value;
 
     const filtered = allCells.filter(cell => {
         const matchDia = !dia || (cell[HEADERS.DIA] && cell[HEADERS.DIA].toLowerCase() === dia);
         
         return (!rede || cell[HEADERS.REDE] === rede) &&
-               (!uf || cell[HEADERS.UF] === uf) &&
                (!cidade || cell[HEADERS.CIDADE] === cidade) &&
                (!bairro || cell[HEADERS.BAIRRO] === bairro) &&
                matchDia &&
@@ -216,15 +223,13 @@ function updateSummary() {
         
         // Lógica de clicar no painel resumo
         li.addEventListener('click', () => {
-            const diaSelect = document.getElementById('filter-dia');
-            
-            if (diaSelect.value === day) {
+            if (selectedDayFilter === day) {
                 // Se já estiver clicado, desmarca
-                diaSelect.value = '';
+                selectedDayFilter = '';
                 li.classList.remove('active');
             } else {
                 // Senão ele sobrepõe com a seleção deste dia
-                diaSelect.value = day;
+                selectedDayFilter = day;
             }
             
             // Depois ele dispara o filtro total de forma automatica
