@@ -1,11 +1,11 @@
 :root {
-    /* Color Palette */
-    --primary-gold: #D4AF37;
-    /* Gold/Sand */
-    --primary-sand: #E6D2B5;
-    --dark-blue: #0A192F;
-    /* Deep Night Sky */
-    --dark-bg: #020c1b;
+    /* Color Palette - Igreja Atitude */
+    --primary-gold: #FF6600;
+    /* Orange / White */
+    --primary-sand: #FFAA66;
+    --dark-blue: #111111;
+    /* Deep Dark */
+    --dark-bg: #0f0f0f;
     /* Almost black */
     --light-text: #F8F9FA;
     --glass-bg: rgba(255, 255, 255, 0.05);
@@ -60,7 +60,7 @@ body {
     justify-content: space-between;
     align-items: center;
     z-index: 1000;
-    background: rgba(2, 12, 27, 0.8);
+    background: rgba(15, 15, 15, 0.9);
     /* Slightly darker for legibility */
     border-bottom: 1px solid var(--glass-border);
 }
@@ -122,7 +122,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to bottom, rgba(2, 12, 27, 0.4), rgba(2, 12, 27, 0.9));
+    background: linear-gradient(to bottom, rgba(15, 15, 15, 0.4), rgba(15, 15, 15, 0.9));
     z-index: 1;
 }
 
@@ -239,7 +239,7 @@ section {
 
 /* Concept Section */
 .concept-section {
-    background: linear-gradient(to top, var(--dark-bg), #0f1d30);
+    background: linear-gradient(to top, var(--dark-bg), #1c1c1c);
 }
 
 .rounded-img {
@@ -496,7 +496,7 @@ footer {
 }
 
 .modal-content {
-    background: #0f1d30;
+    background: #1c1c1c;
     padding: 2rem;
     width: 90%;
     max-width: 400px;

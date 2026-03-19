@@ -19,14 +19,17 @@ const HEADERS = {
     DIA: 'dia_da_semana',
     HORA: 'horainicio',
     LIDERES: 'lideres',
-    CONTATO: 'contato'
+    CONTATO: 'contato',
+    KIDS: 'kids'
 };
 
 const NETWORK_COLORS = {
     'azul': '#3388ff',
     'vermelho': '#e84545',
+    'vermelha': '#e84545',
     'verde': '#2b9348',
-    'amarelo': '#f4d35e',
+    'amarelo': '#FFFF00',
+    'amarela': '#FFFF00',
     'laranja': '#f77f00',
     'roxo': '#9d4edd',
     'rosa': '#ff4d6d',
@@ -84,8 +87,8 @@ function loadCSV() {
         .then(text => {
             parseCSV(text);
             populateFilters();
-            updateSummary();
-            renderMap(allCells);
+            initSummary();
+            applyFilters();
         })
         .catch(err => {
             console.error("Erro ao carregar ou processar celulas.csv:", err);
@@ -142,7 +145,8 @@ function populateFilters() {
         'filter-rede': HEADERS.REDE,
         'filter-cidade': HEADERS.CIDADE,
         'filter-bairro': HEADERS.BAIRRO,
-        'filter-horario': HEADERS.HORA
+        'filter-horario': HEADERS.HORA,
+        'filter-kids': HEADERS.KIDS
     };
 
     for (const [selectId, field] of Object.entries(filterSelectors)) {
@@ -174,18 +178,25 @@ function applyFilters() {
     const bairro = document.getElementById('filter-bairro').value;
     const dia = selectedDayFilter;
     const horario = document.getElementById('filter-horario').value;
+    const kids = document.getElementById('filter-kids').value;
 
-    const filtered = allCells.filter(cell => {
-        const matchDia = !dia || (cell[HEADERS.DIA] && cell[HEADERS.DIA].toLowerCase() === dia);
-        
+    let baseFiltered = allCells.filter(cell => {
         return (!rede || cell[HEADERS.REDE] === rede) &&
                (!cidade || cell[HEADERS.CIDADE] === cidade) &&
                (!bairro || cell[HEADERS.BAIRRO] === bairro) &&
-               matchDia &&
-               (!horario || cell[HEADERS.HORA] === horario);
+               (!horario || cell[HEADERS.HORA] === horario) &&
+               (!kids || cell[HEADERS.KIDS] === kids);
     });
 
-    renderMap(filtered);
+    // Update quantities in the summary UI based on current faceted filter (except day)
+    updateSummaryCounts(baseFiltered);
+
+    // Apply DAY selected
+    let finalFiltered = baseFiltered.filter(cell => {
+        return !dia || (cell[HEADERS.DIA] && cell[HEADERS.DIA].toLowerCase() === dia);
+    });
+
+    renderMap(finalFiltered);
 
     // Ilumina o dia na caixinha de resumo se a pessoa usou o select normal de dia
     document.querySelectorAll('#summary-list li').forEach(li => {
@@ -197,46 +208,47 @@ function applyFilters() {
     });
 }
 
-function updateSummary() {
+function initSummary() {
     const summaryList = document.getElementById('summary-list');
     summaryList.innerHTML = '';
+    const dayOrder = ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'];
+    
+    dayOrder.forEach(day => {
+        const li = document.createElement('li');
+        li.dataset.day = day; // guarda minusculo
+        const badgeId = `badge-${day.replace('-','')}`;
+        li.innerHTML = `<span style="text-transform: capitalize;">${day}</span> <span class="badge" id="${badgeId}">0</span>`;
+        
+        // Lógica de clicar no painel resumo
+        li.addEventListener('click', () => {
+            if (selectedDayFilter === day) {
+                selectedDayFilter = '';
+                li.classList.remove('active');
+            } else {
+                selectedDayFilter = day;
+            }
+            applyFilters();
+        });
 
-    // Contagem rápida das celulas para cada dia
+        summaryList.appendChild(li);
+    });
+}
+
+function updateSummaryCounts(cells) {
     const countByDay = {};
-    allCells.forEach(cell => {
+    cells.forEach(cell => {
         const day = cell[HEADERS.DIA];
         if (day) {
             countByDay[day.toLowerCase()] = (countByDay[day.toLowerCase()] || 0) + 1;
         }
     });
 
-    // Ordem natural dos dias da semana pra exibir SEMPRE, mesmo que count seja 0
     const dayOrder = ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'];
-    
-    // Cria as 'li' e coloca o evento de click exclusivo
     dayOrder.forEach(day => {
         const count = countByDay[day] || 0;
-        
-        const li = document.createElement('li');
-        li.dataset.day = day; // guarda minusculo
-        li.innerHTML = `<span style="text-transform: capitalize;">${day}</span> <span class="badge">${count}</span>`;
-        
-        // Lógica de clicar no painel resumo
-        li.addEventListener('click', () => {
-            if (selectedDayFilter === day) {
-                // Se já estiver clicado, desmarca
-                selectedDayFilter = '';
-                li.classList.remove('active');
-            } else {
-                // Senão ele sobrepõe com a seleção deste dia
-                selectedDayFilter = day;
-            }
-            
-            // Depois ele dispara o filtro total de forma automatica
-            applyFilters();
-        });
-
-        summaryList.appendChild(li);
+        const badgeId = `badge-${day.replace('-','')}`;
+        const badge = document.getElementById(badgeId);
+        if (badge) badge.textContent = count;
     });
 }
 
@@ -295,6 +307,7 @@ function renderMap(cells) {
 
         // Prepara o popup de HTML
         const whatsappNumber = cell[HEADERS.CONTATO].replace(/\D/g, ''); // limpa tudo, deixa sós os numeros para o link
+        
         const popupContent = `
             <div style="font-family: 'Outfit', sans-serif;">
                 <h3 style="margin:0 0 5px 0; color: #111;">Célula ${cell[HEADERS.NOME]}</h3>
@@ -303,6 +316,7 @@ function renderMap(cells) {
                 <p style="margin:2px 0;"><strong>Líderes:</strong> ${cell[HEADERS.LIDERES]}</p>
                 <p style="margin:2px 0;"><strong>Quando:</strong> ${cell[HEADERS.DIA]} às ${cell[HEADERS.HORA]}</p>
                 <p style="margin:2px 0;"><strong>Rede:</strong> ${cell[HEADERS.REDE]}</p>
+                <p style="margin:2px 0;"><strong>Kids:</strong> ${cell[HEADERS.KIDS] || 'Não informado'}</p>
                 <a href="https://wa.me/55${whatsappNumber}?text=Olá!%20Gostaria%20de%20visitar%20a%20célula%20${cell[HEADERS.NOME]}%21" 
                    target="_blank" 
                    style="display:inline-block; margin-top:8px; padding:6px 12px; background:#25D366; color:#fff; text-decoration:none; border-radius:5px; font-weight:bold; width:100%; text-align:center; box-sizing:border-box;">
@@ -335,14 +349,31 @@ document.addEventListener('DOMContentLoaded', () => {
         inputSearch.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') performAddressSearch();
         });
+        
+        // Remove filters when input is cleared physically
+        inputSearch.addEventListener('input', (e) => {
+            if (e.target.value.trim() === '') {
+                clearAddressSearch();
+            }
+        });
     }
 });
 
+function clearAddressSearch() {
+    document.getElementById('address-search').value = '';
+    if (userMarker) {
+        map.removeLayer(userMarker);
+        userMarker = null;
+    }
+}
+
 async function performAddressSearch() {
     const query = document.getElementById('address-search').value.trim();
-    if (!query) return;
+    if (!query) {
+        clearAddressSearch();
+        return;
+    }
 
-    // Removemos os marcadores de endereço e repintamos as células para limpar pesquisas anteriores
     if (userMarker) {
         map.removeLayer(userMarker);
     }
@@ -364,18 +395,22 @@ async function performAddressSearch() {
             const userLat = parseFloat(data[0].lat);
             const userLng = parseFloat(data[0].lon);
 
-            // Cria o ícone para o usuário (Ponto de Origem)
+            // Cria o ícone para o usuário (Casa)
             const userIcon = L.divIcon({
                 className: '',
-                html: `<div style="background-color: var(--primary-gold); border: 3px solid var(--dark-bg); width: 16px; height: 16px; border-radius: 50%; box-shadow: 0 0 5px rgba(0,0,0,0.5);"></div>`,
-                iconSize: [20, 20],
-                iconAnchor: [10, 10]
+                html: `<div style="font-size: 32px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); text-align: center; margin-left: -5px; line-height: 1;">🏠</div>`,
+                iconSize: [32, 32],
+                iconAnchor: [16, 30],
+                popupAnchor: [0, -32]
             });
 
             userMarker = L.marker([userLat, userLng], { icon: userIcon }).addTo(map)
-                .bindPopup(`<b>Ponto de Busca:</b><br>${query}`);
-
-            findClosestCell(userLat, userLng);
+                .bindPopup(`<b>📍 Localização Buscada:</b><br>${query}`);
+            
+            // Move a câmera para o endereço e deixa que o usuário observe o que há na tela
+            map.flyTo([userLat, userLng], 14, { duration: 1.5 });
+            
+            userMarker.openPopup();
 
         } else {
             alert("Endereço não encontrado. Tente ser mais específico (ex: Rua Nome, Cidade - Estado).");
@@ -386,51 +421,5 @@ async function performAddressSearch() {
     } finally {
         btnSearch.innerText = originalText;
         btnSearch.disabled = false;
-    }
-}
-
-function findClosestCell(userLat, userLng) {
-    if (currentMarkers.length === 0) {
-        alert("Não há células visíveis no mapa para calcular a distância.");
-        map.setView([userLat, userLng], 14);
-        return;
-    }
-
-    let closest = null;
-    let minDistance = Infinity;
-
-    currentMarkers.forEach(item => {
-        // map.distance(A, B) calcula a distância geodésica curvada da terra (Haversine) em Metros nativamente pelo Leaflet
-        const dist = map.distance([userLat, userLng], [item.lat, item.lng]);
-        if (dist < minDistance) {
-            minDistance = dist;
-            closest = item;
-        }
-    });
-
-    if (closest) {
-        const distKm = (minDistance / 1000).toFixed(1);
-        
-        // Ajusta a câmera do mapa para englobar visualmente na tela BOTH o usuário E a célula mais próxima simultaneamente
-        const bounds = L.latLngBounds([userLat, userLng], [closest.lat, closest.lng]);
-        
-        // Dá um fitBounds, mas limita o maxZoom para não dar close demais caso seja o vizinho de porta
-        map.fitBounds(bounds, { padding: [50, 50], maxZoom: 15 });
-
-        // Abre o popup da célula com uma anotação de distância injetada de forma não-destrutiva
-        const originalPopup = closest.marker.getPopup().getContent();
-        
-        // Evita duplicar a etiqueta de distância se o usuário apertar buscar 2 vezes consecutivas
-        if (!originalPopup.includes('Distância aproximada:')) {
-             closest.marker.setPopupContent(originalPopup + `
-             <div style="margin-top:10px; padding:8px; background:rgba(232, 69, 69, 0.1); border-left:4px solid #e84545; border-radius:4px;">
-                 <p style="margin:0; color:#e84545; font-weight:bold; font-size:12px;">📍 Mais Próxima (${distKm} km)</p>
-             </div>`);
-        }
-        
-        // Após o movimento de câmera terminar, abre o popup automaticamente
-        setTimeout(() => {
-            closest.marker.openPopup();
-        }, 500); // pequeno delay visual
     }
 }

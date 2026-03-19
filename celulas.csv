@@ -1,9 +1,41 @@
-rede;nome_celula;uf;cidade;bairro;endereco;latitude;raio;dia_da_semana;horainicio;lideres;contato
-azul;Sinai;SP;Santana de Parnaiba;Alpha Zero;;-23.485900,-46.838003;1.5;quinta-feira;20h;Maicon e Bruna;(51) 989107969
-azul;Gigantes de Atitude;SP;Barueri;Alpha 3;;-23.476143,-46.862134;1.5;terca-feira;20h;Augusto Carrara;(11) 978880047
-azul;Celula tempo de Renovo;SP;Barueri;Jardim Tupanci;;-23.493274,-46.869426;1.5;quinta-feira;20h;Carlos Eduardo e Bruna;(11 ) 945373253
-azul;Casa sobre a Rocha;SP;Sao Paulo;Av. Dr. Cardoso de Melo;;-23.598817,-46.683596;2;quinta-feira;20h;Mayara;(11) 982378401
-azul;Rede Azul;SP;Cajamar;R. das Caliandras;;-23.395650, -46.861173;2;sabado;16h;Carlos Eduardo;(11 ) 945373253
-azul;Shekinah;SP;Barueri;Alphaville;;-23.45273925133563, -46.87831373312599;1.5;terca-feira;20h;Lisiane e Silvio;(47) 997057755
-azul;A mesa do Reino;SP;Interlagos;Interlagos;;-23.720500370843205, -46.687207133730276;2;quinta-feira;20h;Sara e Adelson;(11) 993873064
-azul;Aldeia da Serra;SP;Aldeia da Serra;Aldeia da serra;;-23.489316181035488, -46.96191386010793;2;quinta-feira;19h30;Caio;(11) 993092366
+rede;nome_celula;uf;cidade;bairro;endereco;latitude;raio;dia_da_semana;horainicio;lideres;contato;kids
+Azul;Sinai;SP;Santana de Parnaiba;Alpha Zero;;-23.485900,-46.838003;1;quinta-feira;20h;Maicon e Bruna;(51) 989107969;Sim
+Azul;Gigantes de Atitude;SP;Barueri;Alpha 3;;-23.476143,-46.862134;1;terca-feira;20h;Augusto Carrara;(11) 978880047;Sim
+Azul;Celula tempo de Renovo;SP;Barueri;Jardim Tupanci;;-23.493274,-46.869426;1;quinta-feira;20h;Carlos Eduardo e Bruna;(11 ) 945373253;Sim
+Azul;Casa sobre a Rocha;SP;Sao Paulo;Av. Dr. Cardoso de Melo;;-23.598817,-46.683596;2;quinta-feira;20h;Mayara;(11) 982378401;Não
+Azul;Rede Azul;SP;Cajamar;R. das Caliandras;;-23.395650, -46.861173;2;sabado;16h;Carlos Eduardo;(11 ) 945373253;Não
+Azul;Shekinah;SP;Barueri;Alphaville;;-23.45273925133563, -46.87831373312599;1;terca-feira;20h;Lisiane e Silvio;(47) 997057755;Sim
+Azul;A mesa do Reino;SP;Interlagos;Interlagos;;-23.720500370843205, -46.687207133730276;2;quinta-feira;20h;Sara e Adelson;(11) 993873064;Não
+Azul;Aldeia da Serra;SP;Aldeia da Serra;Aldeia da serra;;-23.489316181035488, -46.96191386010793;2;quinta-feira;19h30;Caio;(11) 993092366;Sim
+Amarela;Atos;SP;Barueri;Residencial Tamboré;Avenida Franca;-23.4789,-46.8742;1;Terça-feira;19h30;Isaura Reis da Silva;5,51192E+12;Não
+Amarela;Atos_2;SP;Barueri;Jardim Julio;Rua Júlio Feltscher;-23.5182,-46.8614;1;Terça-feira;20h;Wesley Augusto Santos Silva;5,512E+12;Sim
+Laranja;Blessed- atitude;SP;Barueri;Jardim Iracema/Aldeia;Rua Luiz Scott;-23.5042,-46.8721;1;;19h30;João Otavio Dias Nogueira;5,54799E+12;Sim
+Laranja;Brave;SP;Barueri;Alphaville Centro Industrial e Empresarial/Alphaville.;Avenida Juruá;-23.5034,-46.8523;1;;;Daniela Botteselli;5,51198E+12;Não
+Laranja;Brave;SP;Santana de Parnaíba;Alphaville;Avenida Universitário;-23.4646,-46.8683;1;;20h;Rodrigo Jabur;5,51197E+12;Não
+Laranja;Caminhando com Cristo;SP;São Paulo;Jardim Arpoador;Rodovia Raposo Tavares;-23.5855,-46.7580;1;Quinta-feira;20h;Margareth da Silva Cerqueira;5,52197E+12;Não
+Verde;Canaã;SP;Cotia;Jardim Pioneiro;Estrada Normândia;-23.6190,-46.8745;1;;;Luís Fernando Vega de Albuquerque;0;Não
+Amarela;Casa do Pão;SP;Jandira;Jardim das Margaridas;Rua Ancião Sebastião Antonini;-23.5367,-46.9063;1;;;Isaac Alves Breder;5,51199E+12;Não
+Amarela;Celula Efésios;SP;Guarulhos;Vila Augusta;Rua Augusta;-23.4756,-46.5401;1;Quinta-feira;20h;Manoel Hilário Vieira Filho;5,51198E+12;Não
+Laranja;Célula One;SP;Barueri;Jardim Tupanci;Rua Marte;-23.4795,-46.8481;1;;20h;Ryan Lucas Fressatto;5,51497E+12;Não
+Verde;Célula Res 10;SP;Santana de Parnaíba;Residencial Dez (Alphaville);Al. Nhambiquaras;-23.4752,-46.8624;1;;;Caique Diniz Ribeiro;5,51193E+12;Sim
+Laranja;Célula Resgate (Cotia);SP;Cotia;Condominio São Paulo II;Rua Luis Antônio de Rossi;-23.5888,-46.9042;1;Quinta-feira;20h;Jonas Brito Batista;5,51193E+12;Não
+Verde;Célula Yeshua;SP;Barueri;Alphaville Centro Industrial e Empresarial/Alphaville.;Avenida Juruá;-23.5034,-46.8523;1;Terça-feira;20h;Davi Sousa Kind;1,11193E+12;Não
+Laranja;Dunamis;SP;Jundiaí;Jardim Ana Maria;Rua Elias Juvenal de Mello;-23.1972,-46.8920;1;;;Ewerton Jose de Oliveira Macedo;5,51197E+12;Não
+Amarela;Ebenezer Alpha;SP;Santana de Parnaíba;Tamboré;Alameda Austrália;-23.4721,-46.8679;1;Terça-feira;20h;Paulo Cardona Licca;5,51198E+12;Não
+Amarela;Efatá;SP;Araçoiaba da Serra;;;-23.5031,-47.6146;1;;;Sariani Sheron Santos;0;Não
+Amarela;Emaus;SP;Jandira;Jardim Belmont;Rua Rita do Nascimento Duca;-23.5451,-46.9112;1;Terça-feira;19h30;Ricardo Sousa Rodrigues;0;Não
+Amarela;Flechas;SP;Barueri;Alphaville Centro Industrial e Empresarial/Alphaville.;Avenida Juruá;-23.5034,-46.8523;1;Quarta-feira;20h;Matheus Jonathas Vicente;5,512E+12;Não
+Amarela;GÊNESIS ALPHAVILLE;SP;Guarulhos;Picanço;Rua Antonieta;-23.4578,-46.5293;1;;;Isaura Reis da Silva;5,51192E+12;Não
+Amarela;Gileade;SP;Barueri;Jardim Tupanci;Rua Marte;-23.4795,-46.8481;1;Terça-feira;19h30;Vitor Leite;0;Não
+Laranja;Huios;SP;Osasco;São Pedro;Rua Antônio Peres Paniágua;-23.5513,-46.7885;1;Segunda-feira;20h;Fabio Luiz Cabral;0;Não
+Laranja;Koinonia;SP;Carapicuíba;Vila Mercês;Rua São Joaquim;-23.5358,-46.8229;1;Terça-feira;20h;Jonas Brito Batista;5,51193E+12;Não
+Laranja;Moryah;SP;Barueri;Jardim Tupanci;Rua Marte;-23.4795,-46.8481;1;;;Müller César Fressatto ;5,515E+12;Não
+Laranja;Os Bereanos de Osasco;SP;Osasco;Quitaúna;Rua Orlando Geisel;-23.5435,-46.7918;1;Quinta-feira;20h;Rodrigo Jabur;5,51197E+12;Sim
+Laranja;Os Pequenos Gigantes;SP;Osasco;Vila Quitauna;Rua Orlando Geisel;-23.5435,-46.7918;1;;;Wandressa Silvestre Jabur;5,51197E+12;Não
+Amarela;Peniel;SP;Santana de Parnaíba;Tamboré;Avenida Marcos Penteado de Ulhôa Rodrigues;-23.4658,-46.8552;1;;;Emerson Pereira Teixeira;5,51194E+12;Não
+Amarela;Provérbios;SP;São Paulo;Jardim D'Abril;Rua Eusébio de Paula Marcondes;-23.4988,-46.7324;1;;;Cristiano Pinheiro de Lima;5,51195E+12;Não
+Amarela;Sião;SP;Santana de Parnaíba;Alphaville;Alameda Caiçara;-23.4835,-46.8576;1;;;Edilson de Lima;5,51195E+12;Não
+Verde;Sophia Soares Monteiro ;SP;São Paulo;Jardim Paulista;Alameda Campinas;-23.5682,-46.6571;1;Segunda-feira;19h;Sophia Soares Monteiro ;5,52192E+12;Não
+Verde;Tempo de Renovo;SP;Barueri;Jardim Tupanci;Rua Terra;-23.4831,-46.8493;1;;;Carlos Eduardo Machado de Alcantara;0;Não
+Laranja;Teshuvá;SP;Barueri;Jardim Tupanci;Rua Werner Goldberg;-23.5037,-46.8831;1;Quinta-feira;20h;Lucas Lamela Dutra Bastos;5,525E+12;Não
+Laranja;Yaweh;SP;Osasco;Piratininga;Rua Paula Rodrigues;-23.5414,-46.8041;1;Quinta-feira;20h;Alan Pedroso de Oliveira;5,51198E+12;Não

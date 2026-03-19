@@ -15,8 +15,8 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="mapa.css">
+    <link rel="stylesheet" href="style.css?v=10">
+    <link rel="stylesheet" href="mapa.css?v=10">
 </head>
 
 <body>
@@ -24,10 +24,10 @@
     <nav class="navbar glass">
         <div class="logo">
             <a href="index.html">
-                <img src="assets/images/logo_rede_azul.png" alt="Rede Azul" class="nav-logo-img">
+                <img src="assets/images/logo_atitude.png" alt="Igreja Atitude" class="nav-logo-img">
             </a>
         </div>
-        <a href="index.html" class="btn-visit">Voltar ao Início</a>
+        <a href="index.html" class="btn-visit" style="color: white;">Voltar ao Início</a>
     </nav>
 
     <div class="map-layout">
@@ -39,8 +39,8 @@
             <div class="filter-group" style="margin-bottom: 10px;">
                 <label for="address-search">Célula mais próxima (Endereço)</label>
                 <div style="display: flex; gap: 5px;">
-                    <input type="text" id="address-search" placeholder="Rua Nome, Cidade" style="flex-grow: 1; padding: 10px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.2); background: var(--dark-bg); color: white; font-family: 'Outfit', sans-serif;">
-                    <button id="btn-search-address" style="background: var(--primary-gold); border: none; border-radius: 8px; padding: 0 15px; cursor: pointer; color: var(--dark-bg); font-weight: bold;">Ir</button>
+                    <input type="text" id="address-search" placeholder="Rua Nome, Cidade" style="flex-grow: 1; padding: 10px; border-radius: 8px; border: 1px solid #cccccc; background: #fff; color: #333; font-family: 'Outfit', sans-serif;">
+                    <button id="btn-search-address" style="background: var(--primary-gold); border: none; border-radius: 8px; padding: 0 15px; cursor: pointer; color: white; font-weight: bold;">Ir</button>
                 </div>
             </div>
 
@@ -51,26 +51,33 @@
                 </select>
             </div>
             
-            <div style="display: flex; gap: 10px;">
-                <div class="filter-group" style="flex: 1;">
-                    <label for="filter-cidade">Cidade</label>
-                    <select id="filter-cidade">
-                        <option value="">Todas</option>
-                    </select>
-                </div>
-                <div class="filter-group" style="flex: 1;">
-                    <label for="filter-bairro">Bairro</label>
-                    <select id="filter-bairro">
-                        <option value="">Todos</option>
-                    </select>
-                </div>
+            <div class="filter-group">
+                <label for="filter-cidade">Cidade</label>
+                <select id="filter-cidade">
+                    <option value="">Todas</option>
+                </select>
             </div>
 
             <div class="filter-group">
-                <label for="filter-horario">Horário</label>
-                <select id="filter-horario">
+                <label for="filter-bairro">Bairro</label>
+                <select id="filter-bairro">
                     <option value="">Todos</option>
                 </select>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <div class="filter-group" style="flex: 1;">
+                    <label for="filter-horario">Horário</label>
+                    <select id="filter-horario">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
+                <div class="filter-group" style="flex: 1;">
+                    <label for="filter-kids">Kids</label>
+                    <select id="filter-kids">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
             </div>
 
             <!-- Quadro de Resumo por Dia -->
@@ -82,15 +89,12 @@
             </div>
 
             <!-- QR Code de Cadastro -->
-            <div class="qr-container" style="text-align: center; margin-top: auto; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.2); display: flex; flex-direction: column; justify-content: flex-end;">
-                <h3 style="color: var(--primary-gold); font-size: 1.1rem; margin-bottom: 10px;">Bem-vindos à família Atitude!</h3>
+            <div class="qr-container" style="text-align: center; margin-top: 15px; padding-top: 15px; border-top: 1px solid #eeeeee; display: flex; flex-direction: column; justify-content: flex-end;">
+                <h3 style="color: var(--primary-gold); font-size: 1.1rem; margin-bottom: 10px; font-weight: 800;">Bem-vindos à família Atitude!</h3>
                 <img src="assets/images/qr_cadastro.png" alt="QR Code Cadastro" style="width: 100%; max-width: 200px; height: auto; background: white; padding: 5px; border-radius: 8px; border: 2px solid var(--primary-gold); margin: 0 auto;">
             </div>
 
-            <!-- Botão para Vídeos -->
-            <a href="videos.html" class="btn-visit" style="display:block; text-align:center; margin-top:15px; background:var(--primary-gold); color:var(--dark-bg);">
-                ▶ Assistir Vídeos
-            </a>
+            <!-- Botão para Vídeos removido conforme solicitado -->
         </aside>
 
         <!-- Container do Mapa -->
@@ -102,7 +106,7 @@
     <!-- Leaflet JS (Mapa) -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
     <!-- Script Personalizado -->
-    <script src="mapa.js"></script>
+    <script src="mapa.js?v=10"></script>
 </body>
 
 </html>
