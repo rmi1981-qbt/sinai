@@ -79,9 +79,9 @@ function initMap() {
 function loadCSV() {
     // Como estamos na pasta local usando o 'serve', ler arquivos assim é bem simples
     // Usamos um timestamp para garantir que o navegador não cacheie a versão velha do CSV
-    fetch(`celulas.csv?t=${new Date().getTime()}`)
+    fetch(`celulas_fixed.csv?t=${new Date().getTime()}`)
         .then(response => {
-            if (!response.ok) throw new Error("Erro ao carregar celulas.csv");
+            if (!response.ok) throw new Error("Erro ao carregar celulas_fixed.csv");
             return response.text();
         })
         .then(text => {
@@ -91,10 +91,10 @@ function loadCSV() {
             applyFilters();
         })
         .catch(err => {
-            console.error("Erro ao carregar ou processar celulas.csv:", err);
+            console.error("Erro ao carregar ou processar celulas_fixed.csv:", err);
             // Mostrar mensagem de erro na tela se falhar o CSV (para sabermos fácil)
             const mapDiv = document.getElementById('map');
-            if(mapDiv) mapDiv.innerHTML = `<div style="padding:20px; color:red;">Erro ao ler celulas.csv! Verifique o console: ${err.message}</div>`;
+            if(mapDiv) mapDiv.innerHTML = `<div style="padding:20px; color:red;">Erro ao ler celulas_fixed.csv! Verifique o console: ${err.message}</div>`;
         });
 }
 
@@ -130,7 +130,7 @@ function parseCSV(text) {
                 const lowerVal = val.toLowerCase();
                 if (lowerVal === 'terca-feira' || lowerVal === 'terça feira' || lowerVal === 'terca feira') val = 'terça-feira';
                 if (lowerVal === 'sabado') val = 'sábado';
-                val = val.toLowerCase();
+                val = val.toLowerCase() || 'sem informação';
             }
             
             row[key] = val;
@@ -211,12 +211,12 @@ function applyFilters() {
 function initSummary() {
     const summaryList = document.getElementById('summary-list');
     summaryList.innerHTML = '';
-    const dayOrder = ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'];
+    const dayOrder = ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado', 'sem informação'];
     
     dayOrder.forEach(day => {
         const li = document.createElement('li');
         li.dataset.day = day; // guarda minusculo
-        const badgeId = `badge-${day.replace('-','')}`;
+        const badgeId = `badge-${day.replace(/[^a-z0-9]/g, '')}`;
         li.innerHTML = `<span style="text-transform: capitalize;">${day}</span> <span class="badge" id="${badgeId}">0</span>`;
         
         // Lógica de clicar no painel resumo
@@ -243,10 +243,10 @@ function updateSummaryCounts(cells) {
         }
     });
 
-    const dayOrder = ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'];
+    const dayOrder = ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado', 'sem informação'];
     dayOrder.forEach(day => {
         const count = countByDay[day] || 0;
-        const badgeId = `badge-${day.replace('-','')}`;
+        const badgeId = `badge-${day.replace(/[^a-z0-9]/g, '')}`;
         const badge = document.getElementById(badgeId);
         if (badge) badge.textContent = count;
     });
